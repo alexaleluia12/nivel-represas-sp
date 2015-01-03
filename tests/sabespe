@@ -1,0 +1,366 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	Divulgação Informações Mananciais
+</title><link href="estilos.css" rel="stylesheet" type="text/css" /><link href="./flot/flot.css" rel="stylesheet" type="text/css" />
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="./flot/excanvas.min.js"></script>
+        
+       
+
+        <![endif]-->
+    <script language="javascript" type="text/javascript" src="./flot/jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="./flot/jquery.flot.min.js"></script>
+    <script language="javascript" type="text/javascript" src="./flot/jquery.flot.categories.js"></script>
+    <script type="text/javascript" src="./flot/jquery.flot.symbol.min.js"></script>
+    <script type="text/javascript" src="./flot/jquery.flot.axislabels.js"></script>
+    
+    <script language="javascript" type="text/javascript">
+
+
+        var DataInvalida = "Data Inválida!";
+        //var meses1 = new Array ("Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez");
+        //var meses = new Array ("Janeiro","Fevereiro","Marco","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro");
+
+        function ValidaData() {
+
+            var dia = document.getElementById('cmbDia').value;
+            var mes = document.getElementById('cmbMes').value;
+            var ano = document.getElementById('cmbAno').value;
+            document.getElementById('cmbDia').focus;
+            var complAno = 0;
+
+            if (navigator.appName.indexOf("Netscape") != -1) complAno = 1900;
+            zeros = "00";
+
+            var hoje = new Date();
+            var diaHj = hoje.getDate();
+            var mesHj = hoje.getMonth();
+            var anoHj = hoje.getYear() + complAno;
+
+            var dataFim = new Date();
+            dataFim.setMonth(mesHj + 10);
+            var diaFim = zeros.substring(0, (2 - (dataFim.getDate() + "").length)) + dataFim.getDate();
+            var mesFim = zeros.substring(0, (2 - ((dataFim.getMonth() + 1) + "").length)) + (dataFim.getMonth() + 1);
+            var anoFim = dataFim.getYear() + complAno;
+
+            diaHj = zeros.substring(0, (2 - (hoje.getDate() + "").length)) + hoje.getDate();
+            mesHj = zeros.substring(0, (2 - ((hoje.getMonth() + 1) + "").length)) + (hoje.getMonth() + 1);
+            if (ano > anoFim) {
+                alert(DataInvalida);
+                document.getElementById('cmbDia').focus;
+                return false;
+            }
+
+            // verifica se o mes e valido
+            if (mes < 1 || mes > 12) {
+                alert(DataInvalida);
+                document.getElementById('cmbDia').focus;
+                return false;
+            }
+            // verifica o dia valido para cada mes
+            if ((dia < 1) || (dia < 1 || dia > 30) && (mes == 4 || mes == 6 || mes == 9 || mes == 11) || dia > 31) {
+                alert(DataInvalida);
+                document.getElementById('cmbDia').focus;
+                return false;
+            }
+            if (mes == 2 && (dia < 1 || dia > 29 || (dia > 28 && ((ano % 4) != 0)))) {
+                alert(DataInvalida);
+                document.getElementById('cmbDia').focus;
+                return false;
+            }
+            return true;
+        }
+
+        $(function () {
+                      
+            tab = $("#form1").text().toString().toLowerCase();
+
+            ini = tab.indexOf("data:", 0);
+            ini = ini + ("data:").length +1;
+            fim = tab.indexOf("::", ini);
+            var data1 = tab.substr(ini, fim - ini);
+            
+            var database = new Date(2014, 05, 15);
+
+            var pattern = /(\d{2})\/(\d{2})\/(\d{4})/;
+
+            var dt = new Date(data1.replace(pattern, '$3'),data1.replace(pattern, '$2'), data1.replace(pattern, '$1'));
+            
+
+            if (dt > database) {
+                $("#divGrafico").show()
+
+                var tab = $("#tabDados").text().toString().toLowerCase();
+                var ini = tab.indexOf("volume armazenado", 0);
+
+                if (ini > -1) {
+                    ini = ini + ("volume armazenado").length;
+                    var fim = tab.indexOf("%", ini);
+                    var volume = tab.substr(ini, fim - ini);
+                    var volumeClean = volume.replace(" ", "").replace(",", ".");
+                }
+
+                var dataGr = [["Volume útil até <br>15/05/2014: <b>8,2%</b>", 8.2], ["Volume útil + Reserva Técnica<br>em " + data1 + ": <b>" + volume + "% (*)</b>", volumeClean]];
+
+                $.plot("#placeholder", [dataGr], {
+                    series: {
+                        bars: {
+                            show: true,
+                            barWidth: 0.5,
+                            align: "center",
+                            fillColor: { colors: [{ opacity: 0.7 }, { opacity: 0.1 }] }
+                        }
+                    },
+                    xaxis: {
+                        mode: "categories",
+                        tickLength: 1,
+                        axisLabelPadding: 3,
+                        min: -0.5,
+                        max: 1.5
+                    },
+                    yaxis: {
+                        axisLabel: "% do Volume Útil",
+                        axisLabelUseCanvas: false,
+
+                        axisLabelFontSizePixels: 14,
+                        axisLabelFontFamily: 'Verdana, Arial',
+                        axisLabelPadding: 3,
+                        tickFormatter: function (v, axis) {
+                            return v;
+                        }
+                    },
+
+                    colors: ["#0022FF"],
+                    valueLabels: {
+                        show: true
+                    },
+                    grid: {
+                        show: true,
+                        borderWidth: 0
+                    }
+                });
+            }
+            else { $("#divGrafico").hide(); }
+        });
+
+    </script>
+</head>
+<body>
+    <form name="form1" method="post" action="DivulgacaoSiteSabesp.aspx" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTE3MjA2NDk4NDkPZBYCAgEPZBYIAgEPDxYCHgRUZXh0BQozMS8xMi8yMDE0ZGQCAw8QZA8WH2YCAQICAgMCBAIFAgYCBwIIAgkCCgILAgwCDQIOAg8CEAIRAhICEwIUAhUCFgIXAhgCGQIaAhsCHAIdAh4WHxAFATEFATFnEAUBMgUBMmcQBQEzBQEzZxAFATQFATRnEAUBNQUBNWcQBQE2BQE2ZxAFATcFATdnEAUBOAUBOGcQBQE5BQE5ZxAFAjEwBQIxMGcQBQIxMQUCMTFnEAUCMTIFAjEyZxAFAjEzBQIxM2cQBQIxNAUCMTRnEAUCMTUFAjE1ZxAFAjE2BQIxNmcQBQIxNwUCMTdnEAUCMTgFAjE4ZxAFAjE5BQIxOWcQBQIyMAUCMjBnEAUCMjEFAjIxZxAFAjIyBQIyMmcQBQIyMwUCMjNnEAUCMjQFAjI0ZxAFAjI1BQIyNWcQBQIyNgUCMjZnEAUCMjcFAjI3ZxAFAjI4BQIyOGcQBQIyOQUCMjlnEAUCMzAFAjMwZxAFAjMxBQIzMWdkZAIFDxBkDxYMZgIBAgICAwIEAgUCBgIHAggCCQIKAgsWDBAFA2phbgUBMWcQBQNmZXYFATJnEAUDbWFyBQEzZxAFA2FicgUBNGcQBQNtYWkFATVnEAUDanVuBQE2ZxAFA2p1bAUBN2cQBQNhZ28FAThnEAUDc2V0BQE5ZxAFA291dAUCMTBnEAUDbm92BQIxMWcQBQNkZXoFAjEyZ2RkAgcPEGQPFgxmAgECAgIDAgQCBQIGAgcCCAIJAgoCCxYMEAUEMjAxNAUEMjAxNGcQBQQyMDEzBQQyMDEzZxAFBDIwMTIFBDIwMTJnEAUEMjAxMQUEMjAxMWcQBQQyMDEwBQQyMDEwZxAFBDIwMDkFBDIwMDlnEAUEMjAwOAUEMjAwOGcQBQQyMDA3BQQyMDA3ZxAFBDIwMDYFBDIwMDZnEAUEMjAwNQUEMjAwNWcQBQQyMDA0BQQyMDA0ZxAFBDIwMDMFBDIwMDNnZGQYAQUeX19Db250cm9sc1JlcXVpcmVQb3N0QmFja0tleV9fFgEFDEltYWdlYnV0dG9uMU3ERMWb+fawEqYECIx3AkeNCLuz" />
+
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="/wEWOQLi6Y6VCgKD1676AgKC1676AgKB1676AgKA1676AgKH1676AgKG1676AgKF1676AgKU1676AgKb1676AgKD1+75AgKD1+L5AgKD1+b5AgKD19r5AgKD1975AgKD19L5AgKD19b5AgKD18r5AgKD1476AgKD14L6AgKC1+75AgKC1+L5AgKC1+b5AgKC19r5AgKC1975AgKC19L5AgKC19b5AgKC18r5AgKC1476AgKC14L6AgKB1+75AgKB1+L5AgKX1/L8BwKW1/L8BwKV1/L8BwKU1/L8BwKT1/L8BwKS1/L8BwKR1/L8BwKA1/L8BwKP1/L8BwKX17L/BwKX177/BwKX17r/BwLOr+OVDwLOr9euCALOr7tDAs6vr+QJAs6vk7kCAqWWoaAFAqWWlcUNAqWWuawLAqWWrcEDAqWWkZoMAqWWhb8FAqWW6dMNAtLCmbQILTVq9gNLFkhW6+2dBy9BeQ0gG5c=" />
+        <div id="geral">
+            <table width="760" border="0" align="center">
+                <tr>
+                    <td height="139">
+                        <img src="imagens/headers_int_represa02.jpg" width="760"
+                            height="195"></td>
+                </tr>
+                <tr>
+                    <td height="530" valign="top">
+                        <p align="right">
+                            <a href="http://www.sabesp.com.br">
+                                <img src="imagens/voltar_site_sabesp.jpg" width="136" height="27" border="0"></a>
+                        </p>
+                        <blockquote>
+                            <p align="justify">
+                                <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong><font color="#FF9900">::</font>
+                                    <span class="titulo">Situa&ccedil;&atilde;o dos Mananciais</span></strong></font>
+                            </p>
+                            <p align="justify" class="texto"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Veja             o &iacute;ndice de armazenamento e pluviometria das represas que abastecem             a Regi&atilde;o Metropolitana de S&atilde;o Paulo.</font></p>
+
+                            <div id="divGrafico" style="display: none">
+                                <br />
+                                <div style="text-align: center; font-family: Verdana"><b>Gráfico de volume do Sistema Cantareira</b></div>
+                                <div id="content" style="font-family: Verdana">
+
+                                    <div class="demo-container">
+                                        <div id="placeholder" class="demo-placeholder"></div>
+                                    </div>
+
+
+                                </div>
+                                <p align="justify" class="texto">
+                                    <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Com a entrada de 182,5 bilhões de litros de água da reserva técnica do Sistema Cantareira em 16/05/2014, foram acrescidos 18,5% sobre o volume total do sistema (982,07 bilhões de litros). 
+                                        <br>
+										(*) Acrescidos 105,0 hm<sup>3</sup> (bilhões de litros) referentes a Reserva Técnica II
+                                    </font>
+                                </p>
+                                </div>
+                            <p align="justify" class="texto">
+
+                                <span class="titulo"><font color="#FF9900">::</font>&nbsp;Data:
+                    <span id="lblData"><font color="Gray" size="3">31/12/2014</font></span>
+                                    <font color="#FF9900">::</font>  Nova 
+                    Data: Dia
+                    <select name="cmbDia" id="cmbDia" class="FormText">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option value="14">14</option>
+	<option value="15">15</option>
+	<option value="16">16</option>
+	<option value="17">17</option>
+	<option value="18">18</option>
+	<option value="19">19</option>
+	<option value="20">20</option>
+	<option value="21">21</option>
+	<option value="22">22</option>
+	<option value="23">23</option>
+	<option value="24">24</option>
+	<option value="25">25</option>
+	<option value="26">26</option>
+	<option value="27">27</option>
+	<option value="28">28</option>
+	<option value="29">29</option>
+	<option value="30">30</option>
+	<option selected="selected" value="31">31</option>
+
+</select>
+                                    Mês
+                    <select name="cmbMes" id="cmbMes" class="FormText">
+	<option value="1">jan</option>
+	<option value="2">fev</option>
+	<option value="3">mar</option>
+	<option value="4">abr</option>
+	<option value="5">mai</option>
+	<option value="6">jun</option>
+	<option value="7">jul</option>
+	<option value="8">ago</option>
+	<option value="9">set</option>
+	<option value="10">out</option>
+	<option value="11">nov</option>
+	<option selected="selected" value="12">dez</option>
+
+</select>
+                                    Ano
+                    <select name="cmbAno" id="cmbAno" class="FormText">
+	<option selected="selected" value="2014">2014</option>
+	<option value="2013">2013</option>
+	<option value="2012">2012</option>
+	<option value="2011">2011</option>
+	<option value="2010">2010</option>
+	<option value="2009">2009</option>
+	<option value="2008">2008</option>
+	<option value="2007">2007</option>
+	<option value="2006">2006</option>
+	<option value="2005">2005</option>
+	<option value="2004">2004</option>
+	<option value="2003">2003</option>
+
+</select>
+                                    &nbsp;
+                    <input type="image" name="Imagebutton1" id="Imagebutton1" src="imagens/h_ico_ok.gif" onclick="return ValidaData();" border="0" />
+                                </span>
+                                &nbsp;
+                            </p>
+                            <table id="tabDados" class="tabDados" cellspacing="1" cellpadding="0" align="Center" border="0" width="279">
+	<tr>
+		<td colspan="2"><img src=imagens/sistemaCantareira.gif></td><td width="279"></td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">volume armazenado</td><td class="guardaImgBgDetalhe" width="88">7,2 %</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria do dia</td><td class="guardaImgBgDetalhe" width="88">0,0 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria acumulada no mês</td><td class="guardaImgBgDetalhe" width="88">165,5 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">média histórica do mês</td><td class="guardaImgBgDetalhe" width="88">220,9 mm</td>
+	</tr><tr>
+		<td></td><td></td>
+	</tr><tr>
+		<td colspan="2"><img src=imagens/sistemaAltoTiete.gif></td><td width="279"></td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">volume armazenado</td><td class="guardaImgBgDetalhe" width="88">12,2 %</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria do dia</td><td class="guardaImgBgDetalhe" width="88">1,6 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria acumulada no mês</td><td class="guardaImgBgDetalhe" width="88">190,6 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">média histórica do mês</td><td class="guardaImgBgDetalhe" width="88">192,8 mm</td>
+	</tr><tr>
+		<td></td><td></td>
+	</tr><tr>
+		<td colspan="2"><img src=imagens/sistemaGuarapiranga.gif></td><td width="279"></td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">volume armazenado</td><td class="guardaImgBgDetalhe" width="88">40,6 %</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria do dia</td><td class="guardaImgBgDetalhe" width="88">0,0 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria acumulada no mês</td><td class="guardaImgBgDetalhe" width="88">248,8 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">média histórica do mês</td><td class="guardaImgBgDetalhe" width="88">175,2 mm</td>
+	</tr><tr>
+		<td></td><td></td>
+	</tr><tr>
+		<td colspan="2"><img src=imagens/sistemaCotia.gif></td><td width="279"></td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">volume armazenado</td><td class="guardaImgBgDetalhe" width="88">31,5 %</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria do dia</td><td class="guardaImgBgDetalhe" width="88">0,2 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria acumulada no mês</td><td class="guardaImgBgDetalhe" width="88">80,3 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">média histórica do mês</td><td class="guardaImgBgDetalhe" width="88">172,2 mm</td>
+	</tr><tr>
+		<td></td><td></td>
+	</tr><tr>
+		<td colspan="2"><img src=imagens/sistemaRioGrande.gif></td><td width="279"></td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">volume armazenado</td><td class="guardaImgBgDetalhe" width="88">72,1 %</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria do dia</td><td class="guardaImgBgDetalhe" width="88">0,0 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria acumulada no mês</td><td class="guardaImgBgDetalhe" width="88">215,2 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">média histórica do mês</td><td class="guardaImgBgDetalhe" width="88">194,8 mm</td>
+	</tr><tr>
+		<td></td><td></td>
+	</tr><tr>
+		<td colspan="2"><img src=imagens/sistemaRioClaro.gif></td><td width="279"></td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">volume armazenado</td><td class="guardaImgBgDetalhe" width="88">33,0 %</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria do dia</td><td class="guardaImgBgDetalhe" width="88">0,8 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">pluviometria acumulada no mês</td><td class="guardaImgBgDetalhe" width="88">306,9 mm</td>
+	</tr><tr>
+		<td class="guardaImgBg" width="180">média histórica do mês</td><td class="guardaImgBgDetalhe" width="88">263,3 mm</td>
+	</tr><tr>
+		<td></td><td></td>
+	</tr>
+</table>
+
+                            
+                        </blockquote>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+    <div class="contador">
+
+        <div class="painel">
+            <p>
+                Acessos desde 23/05/2014:
+                <b>16334345</b>
+            </p>
+        </div>
+    </div>
+    
+
+</body>
+</html>
