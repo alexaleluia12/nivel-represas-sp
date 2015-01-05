@@ -14,36 +14,46 @@ site: http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx
 from lxml import etree
 from lxml.html.soupparser import fromstring
 import basic
+from pprint import pprint
+import string
+import re
 
 # string : S , list : L
 
+def helperSplit(obj):
+    """
+        short-cut para st[re.search(x,st).start():] 
+        obj eh Math object
+    """
+    return obj.string[obj.start():]
+
+def strNumConvert(elemento):	
+    """ pega string no formato '  9,5 %  ' e convert para '9.5'  """
+    elemento = elemento.translate(string.maketrans('%,', ' .'))
+    return elemento.strip()
+    
+def strIBNConvert(elemento):
+    """ pega string no formato 'imagens/sistemaCantareira.gif' e convert para Cantareira """
+    elemento.strip()   
+    newElemento = re.sub(r'i[\w].+/', '', elemento)# newElemento ==  'sistemaCantareira.gif'
+    newElemento = re.sub(r'\.[\w].+', '', newElemento)# newElemento == 'sistemaCantareira'
+    newElemento = helperSplit(re.search(r'[A-Z]', newElemento))# newElemento == 'Cantareira'
+    return newElemento
+    
+
 def main():
-    htmlContent = fromstring(basic.getContent('sabespe'))
-    print('xpath' in dir(htmlContent))
+    htmlContent = fromstring(basic.getContent('sabespe'))# forma de caregar 'html' que possivelmente nao segue padra XML
     localLS = htmlContent.xpath('//table[@id="tabDados"]/tr//@src')	
     quantidadeLS = htmlContent.xpath('//table[@id="tabDados"]/tr//td[contains(., "%")]/text()')
+    # localLS[0] == 'imagens/sistemaCantareira.gif'
+    # quantidadeLS[0] == ''7,2 %''
+    nivel = map(strNumConvert, quantidadeLS)
+    #pprint(nivel)
     
 
 if __name__ == "__main__":
-    main()   
+    print(strIBNConvert('imagens/sistemaCantareira.gif'))
      
 
-"""
-o que eu vou usar para tratar os dados retorndado pelo 'lxml'
 
->>> i = '  9,5 %  '
->>> import string
->>> oi = i.translate(string.maketrans(',%', '. '))
->>> oi
-'  9.5    '
->>> io.strip()
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-NameError: name 'io' is not defined
->>> oi.strip()
-'9.5'
->>> float(oi)
-9.5
-
-"""
 
