@@ -42,7 +42,7 @@ def strIBNConvert(elemento):
     
 
 def main():
-    htmlContent = fromstring(basic.getContent('sabespe'))# forma de caregar 'html' que possivelmente nao segue padra XML
+    htmlContent = fromstring(basic.getContent('sabespe'))# forma de caregar 'html' que possivelmente nao segue padrao XML
     localLS = htmlContent.xpath('//table[@id="tabDados"]/tr//@src')	
     quantidadeLS = htmlContent.xpath('//table[@id="tabDados"]/tr//td[contains(., "%")]/text()')
     # localLS[0] == 'imagens/sistemaCantareira.gif'
