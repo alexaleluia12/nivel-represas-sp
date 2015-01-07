@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-
+# TODO
+# criar essa extrutura com as listas de 'niveis' e 'represas' {"represa": "Cantareira", "nivel": x}
+# pegar essa extrutura de dados acima todos os dias no site da Sabespe (nao sei exata mento como vou fazer isso)
 
 """
 importane:
@@ -20,12 +22,40 @@ import re
 
 # string : S , list : L
 
-def helperSplit(obj):
+def splitUpper(tarString):
+    """ 
+        tarString: string que sera esplitada
+        
+        --
+        retorna um lista de string, mas nao esclui os caraceter da Match,
+        e descondidera a primeria letra da string, usa letra maiusculas como referencia
     """
-        short-cut para st[re.search(x,st).start():] 
-        obj eh Math object
+    listElements = []
+    stRegular = r'[A-Z]'
+    allUpper = re.findall(stRegular, tarString)    
+    assert(allUpper)
+    last = allUpper[-1]
+    firstChar = tarString[0]
+    for letra in allUpper:  
+        if firstChar == letra:
+            continue     
+        indice = tarString.find(letra)     
+        listElements.append(tarString[:indice])
+        tarString = tarString[indice:]# a ultima string sai aqui, entao adiciona depois do for        
+    listElements.append(tarString)
+    return listElements
+    
+
+def stripFirst(obj):
+    """ obj: Math object
+    
+        --            
+        retorna uma string mais human legivel,
+        tira a paravra 'sistema' e insere espacos em branco onde eh conveniente 
+        
     """
-    return obj.string[obj.start():]
+    stStripada = obj.string[obj.start():]
+    return ' '.join(splitUpper(stStripada))
 
 def strNumConvert(elemento):	
     """ pega string no formato '  9,5 %  ' e convert para '9.5'  """
@@ -35,9 +65,9 @@ def strNumConvert(elemento):
 def strIBNConvert(elemento):
     """ pega string no formato 'imagens/sistemaCantareira.gif' e convert para Cantareira """
     elemento.strip()   
-    newElemento = re.sub(r'i[\w].+/', '', elemento)# newElemento ==  'sistemaCantareira.gif'
-    newElemento = re.sub(r'\.[\w].+', '', newElemento)# newElemento == 'sistemaCantareira'
-    newElemento = helperSplit(re.search(r'[A-Z]', newElemento))# newElemento == 'Cantareira'
+    newElemento = re.sub(r'i[\w].+/', '', elemento)# newElemento ==  'sistemaCantareira.gif', tira 'imagens'
+    newElemento = re.sub(r'\.[\w].+', '', newElemento)# newElemento == 'sistemaCantareira'  , tira '.gif'
+    newElemento = stripFirst(re.search(r'[A-Z]', newElemento))# newElemento == 'Cantareira', tira 'sistema'
     return newElemento
     
 
@@ -47,12 +77,15 @@ def main():
     quantidadeLS = htmlContent.xpath('//table[@id="tabDados"]/tr//td[contains(., "%")]/text()')
     # localLS[0] == 'imagens/sistemaCantareira.gif'
     # quantidadeLS[0] == ''7,2 %''
-    nivel = map(strNumConvert, quantidadeLS)
-    #pprint(nivel)
+    niveis = map(strNumConvert, quantidadeLS)
+    represas = map(strIBNConvert, localLS)
+    pprint(niveis)
+    pprint(represas)
     
 
 if __name__ == "__main__":
-    print(strIBNConvert('imagens/sistemaCantareira.gif'))
+    # eu quero uma lista com essa extrutura {"represa": "Cantareira", "nivel": x}
+    main()
      
 
 

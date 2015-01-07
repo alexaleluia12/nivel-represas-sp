@@ -4,18 +4,18 @@
 import re
 
 # TODO
-def splitNotDelete(stRegular, tarString):
-    """ stRegular: string que representa uma regularExp
+def splitUpper(tarString):
+    """ 
         tarString: string que sera esplitada
         
         --
         retorna um lista de string, mas nao esclui os caraceter da Match,
-        e descondidera a primeria letra da string
+        e descondidera a primeria letra da string, usa letra maiusculas como referencia
     """
     listElements = []
-    allUpper = re.findall(stRegular, tarString)
+    stRegular = r'[A-Z]'
+    allUpper = re.findall(stRegular, tarString)    
     assert(allUpper)
-    print(allUpper)
     last = allUpper[-1]
     firstChar = tarString[0]
     for letra in allUpper:  
@@ -50,6 +50,5 @@ def inserirSpaco(st):
 # SaoCarlosDaBara
 
 if __name__ == "__main__":
-    print(splitNotDelete(r'[A-Z]',"SaoCarlosDaBara"))    
-    print(splitNotDelete(r'[A-Z]',"saoCarlosDaBara"))
-    
+    print('$'.join(splitUpper("SaoCarlosDaBara")))    
+
