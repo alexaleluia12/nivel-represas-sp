@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-# TODO
-
-# pegar essa extrutura de dados acima todos os dias no site da Sabespe (nao sei exata mento como vou fazer isso)
 
 """
 importane:
