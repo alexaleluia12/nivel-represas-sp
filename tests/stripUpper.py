@@ -3,7 +3,12 @@
 
 import re
 
-# TODO
+"""
+as duas funcoes abaixo fazer a mesma coisa de forma diferente
+
+a 'splitUpper' faz de uma maneira mais robusta
+"""
+
 def splitUpper(tarString):
     """ 
         tarString: string que sera esplitada
@@ -15,7 +20,7 @@ def splitUpper(tarString):
     listElements = []
     stRegular = r'[A-Z]'
     allUpper = re.findall(stRegular, tarString)    
-    assert(allUpper)
+    assert allUpper, "A string deve ter mais de uma letra maiuscula"
     last = allUpper[-1]
     firstChar = tarString[0]
     for letra in allUpper:  

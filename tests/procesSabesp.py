@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 # TODO
-# criar essa extrutura com as listas de 'niveis' e 'represas' {"represa": "Cantareira", "nivel": x}
+
 # pegar essa extrutura de dados acima todos os dias no site da Sabespe (nao sei exata mento como vou fazer isso)
 
 """
@@ -33,7 +33,7 @@ def splitUpper(tarString):
     listElements = []
     stRegular = r'[A-Z]'
     allUpper = re.findall(stRegular, tarString)    
-    assert(allUpper)
+    assert allUpper, "A string '" + tarString  + "' deve tem mais de uma letra maiuscula"
     last = allUpper[-1]
     firstChar = tarString[0]
     for letra in allUpper:  
@@ -79,12 +79,11 @@ def main():
     # quantidadeLS[0] == ''7,2 %''
     niveis = map(strNumConvert, quantidadeLS)
     represas = map(strIBNConvert, localLS)
-    pprint(niveis)
-    pprint(represas)
+    dictData = dict(zip(represas, niveis)) # {"Sistema", nivel, ...}
+    pprint(dictData)
     
 
-if __name__ == "__main__":
-    # eu quero uma lista com essa extrutura {"represa": "Cantareira", "nivel": x}
+if __name__ == "__main__":    
     main()
      
 
