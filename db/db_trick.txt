@@ -1,0 +1,9 @@
+
+  insert into sabespRepresa values (x,y);
+  
+  x: pode ser tanto float quanto int, assim eu nao precisso converter para int para inserir no banco
+  y: que e do tipo strin aceito a string do dicionario de python
+  
+  
+  
+  
