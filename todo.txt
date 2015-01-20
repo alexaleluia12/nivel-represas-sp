@@ -1,25 +1,9 @@
 # TODO
 
-# criar thread para pegada todos os dados da Sabespe e salvar no banco de dados (usar Sqlite){
- pega a estrutura de dados principal ->
- transformar em string 
- 
-  ## extrutura tabela db ##
-    represas
-    
-    Data dataSite| String strDict
-    
-  ## ##
-}
 
-# pegar essa extrutura de dados principal todos os dias no site da Sabespe {
+# pegar essa extrutura de dados principal todos os dias no site da Sabespe  e salvar no banco{
  ou com 'crontab'
  ou https://docs.python.org/2/library/sched.html
 }
 
-
----------
-seria ideal que eu usase thread para fazer esse programa pois a analize de um dia nao
-pega todos os dados e guaradar em um banco de dados
-depois que todos os dados foram pegas todo dia e necessaio pegar o novo dado
-
+# quando tiver muitos registros vou vazer a parte do html
