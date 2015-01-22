@@ -35,17 +35,17 @@ class Crawl():
             --
             retorna uma string representado o html da 'url' com a requesicao do formulario preechida
         """
-        htmlPage = requests.get(self.url, data=form)# requesicao do formaluario com o metodo 'post'
+        htmlPage = requests.post(self.url, data=form)# requesicao do formaluario com o metodo 'post'
         assert htmlPage.status_code == 200, "Falha ao fazer a requesicao"
         return htmlPage.content
     
-    def getTimestamp(self, dataDict):
+    def getDateStr(self, dataDict):
         """
-            retorna o 'timestamp' do dicionario 'dataDict'
+            retorna o date_str('ano-mes-dia') do dicionario dataDict
         """
-        return time.mktime(
-                datetime.date(*dataDict.values()).timetuple()
-            )# convert '{'cmbAno': 2015,'cmbMes': 1,'cmbDia': 18}' em timestamp
+        formatStr = '%Y-%m-%d'        
+        return datetime.datetime(*dataDict.values()).strftime(formatStr)
+            
             
     def getForm(self, dictDate):
         """
@@ -55,7 +55,7 @@ class Crawl():
         """
         # 'dictDate' == {'cmbAno': '2015','cmbMes': '1','cmbDia': '18'}# ano, mes, dia
         json = self.parserObj.convert(self.getWebPage(dictDate))
-        return {'json': json, 'date': self.getTimestamp(dictDate)}
+        return {'json': json, 'date': self.getDateStr(dictDate)}
         
     
     
