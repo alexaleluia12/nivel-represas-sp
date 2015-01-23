@@ -6,4 +6,5 @@
  ou https://docs.python.org/2/library/sched.html
 }
 
-# quando tiver muitos registros vou vazer a parte do html
+# quando tiver muitos registros (1 ano)
+fazer uma API REST com esses dados

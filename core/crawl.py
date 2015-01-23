@@ -3,23 +3,18 @@
 
 
 # TODO
-# corigir o bug de 'getFrom', 
 # 
-"""
-	bug descriasao:
-	  parece que ando os valores da docinario sao 'int' e retorna do a pagina do dia de hoje
-	  - corigir: eu acho que os valores devem ser 'str', mais eu devo fazer uma conversercao para o 'mktime'
-"""
+# 
 
+import time
+import datetime
 import sys
 import os
 import requests
 from parse import Parser
-import time
-import datetime
+from wrapdb import Db
 
-sys.path.insert(1, os.path.join('..'))
-from training import basic
+
 
 
 # url sabesp form : http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx
@@ -28,6 +23,7 @@ class Crawl():
     def __init__(self, url):
         self.url = url
         self.parserObj = Parser()
+        self.dbObj = Db()
     
     def getWebPage(self, form=dict()):
         """
@@ -53,11 +49,13 @@ class Crawl():
             --
             retorna um dicionario com: {json:{'sistema': nivel, ...}, date: timestamp}
         """
-        # 'dictDate' == {'cmbAno': '2015','cmbMes': '1','cmbDia': '18'}# ano, mes, dia
+        # 'dictDate' == {'cmbAno': 2015,'cmbMes': 1,'cmbDia': 18}# ano, mes, dia
         json = self.parserObj.convert(self.getWebPage(dictDate))
         return {'json': json, 'date': self.getDateStr(dictDate)}
         
-    
+          
+        
+
     
         
         
