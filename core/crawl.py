@@ -18,7 +18,7 @@ from wrapdb import Db
 
 
 # url sabesp form : http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx
-class Crawl():
+class Crawl(object):
     
     def __init__(self, url):
         self.url = url

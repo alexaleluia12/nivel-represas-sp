@@ -6,7 +6,7 @@ from contextlib import closing
 
 DBFILE = '../db/sb.db'
 
-class Db():
+class Db(object):
     
     def save(self, data):
         """

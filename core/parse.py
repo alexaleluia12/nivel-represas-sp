@@ -6,7 +6,7 @@ from lxml.html.soupparser import fromstring
 import re
 import string
 
-class Parser():
+class Parser(object):
 
     def __init__(self):
         pass
