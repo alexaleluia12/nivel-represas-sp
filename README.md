@@ -1,6 +1,15 @@
 nivel-represas-sp
 =================
 
-aplicação que trata os dados do site da sabesp e apresenta de uma forma melhor
+aplicação que pega os Dados importantes da Sabesp
 
-[font:](http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx)
+[font: Sabesp](http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx)
+
+> nota:
+Foi usado a biblioteca 'requests' nesse projeto.
+Porem eu não consegui fazer requições de dias anteriores ao dia atual.
+Eu seria muito grato se alguem coseguise fazer isso.
+
+Local onde é feito a requesição:
+'crawl.py' -> Crawl -> getWebPage
+
