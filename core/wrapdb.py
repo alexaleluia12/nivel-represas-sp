@@ -47,5 +47,13 @@ class Db(object):
                 return True
             except KeyError, err:
                 False
+                
+    def getAll(self):
+        with closing(shelve.open(DBFILE)) as f:
+            for el in f:
+                yield el
+
+    def length(self):
+        return len(list(self.getAll))
         
 
