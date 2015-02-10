@@ -6,13 +6,11 @@
 # 
 # 
 
-import time
+
 import datetime
-import sys
-import os
 import requests
 from parse import Parser
-from wrapdb import Db
+
 
 
 
@@ -23,7 +21,6 @@ class Crawl(object):
     def __init__(self, url):
         self.url = url
         self.parserObj = Parser()
-        self.dbObj = Db()
     
     def getWebPage(self, form=dict()):
         """
@@ -37,7 +34,7 @@ class Crawl(object):
     
     def getDateStr(self, dataDict):
         """
-            retorna o date_str('ano-mes-dia') do dicionario dataDict
+            retorna uma str 'ano-mes-dia' do dicionario dataDict
         """
         formatStr = '%Y-%m-%d'        
         return datetime.datetime(*dataDict.values()).strftime(formatStr)
