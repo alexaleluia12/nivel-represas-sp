@@ -6,5 +6,9 @@
  ou https://docs.python.org/2/library/sched.html
 }
 
+# fazer outro script que verifica se os dados foram realmente pegos no dia correto{
+  - enviar um e-mail para mim quando as coisas darem errado
+}
+
 # quando tiver muitos registros (1 ano)
 fazer uma API REST com esses dados
