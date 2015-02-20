@@ -2,7 +2,7 @@
 #-*- coding:utf-8 -*-
 
 # TODO
-# testar tudo isso, deveria ter usado TDD nesse projeto :(
+# 
 
 from crawl import Crawl
 import threading
@@ -11,15 +11,17 @@ from wrapdb import Db
 
 def fillDict(valDict):
     """
-        retorna valDict com os valeres preenchidos com a respectiva data de hoje
+        retorna dicionario com os valeres preenchidos com a respectiva data de hoje
     """
     ano = "%Y"
     mes = "%m"
     dia = "%d"
     nowDate = datetime.now()
-    valDict["cmbAno"] = int(nowDate.strftime(ano))
-    valDict["cmbMes"] = int(nowDate.strftime(mes))
-    valDict["cmbDia"] = int(nowDate.strftime(dia))
+    copy = valDict
+    copy["cmbAno"] = int(nowDate.strftime(ano))
+    copy["cmbMes"] = int(nowDate.strftime(mes))
+    copy["cmbDia"] = int(nowDate.strftime(dia))
+    return copy
     
 
 class Slave(object):
@@ -27,7 +29,7 @@ class Slave(object):
     URL = "http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx"
     mainData = {'cmbAno': None,'cmbMes': None,'cmbDia': None}
     def __init__(self):
-        self.crawler = Crawl(URL)
+        self.crawler = Crawl(self.URL)
         self.db      = Db() 
         
     def work(self):
@@ -39,7 +41,7 @@ class Slave(object):
 
 if __name__ == '__main__':
     Slave().work()
-
+    
         
 
 
