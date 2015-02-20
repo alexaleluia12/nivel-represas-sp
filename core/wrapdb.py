@@ -14,14 +14,13 @@ class Db(object):
         	
         	data dever estar no formato: {'date': 'xxxx-xx-xx', 'json': {'Guarapiranga': '38.1',...}
         """
-        
         with closing(shelve.open(DBFILE)) as f:
             k = data['date']
             f[k] = data
 
     def getOne(self, strDate):
         """
-        	D.save(strDate) -> retorna {'date': '20xx-xx-xx', 'json': {'Guarapiranga': '38.1',...}}
+        	D.getOne(strDate) -> retorna {'date': '20xx-xx-xx', 'json': {'Guarapiranga': '38.1',...}}
         	    se a strDate estiver salva, caso contrario None
         	    
         	    strDate deve ser uma string parecido com '2010-03-12' ('ano-mes-dia'), caso o mes tenha um digito 
@@ -49,11 +48,19 @@ class Db(object):
                 False
                 
     def getAll(self):
+        """
+            retorna um generator onde cada elemento e um dicionario 
+            parecido com {'date': '20xx-xx-xx', 'json': {'Guarapiranga': '38.1',...}}
+        """
+        
         with closing(shelve.open(DBFILE)) as f:
             for el in f:
-                yield el
+                yield f[el]
 
     def length(self):
-        return len(list(self.getAll))
+        """
+            retorna o a quantidade de registro no banco de dados
+        """
+        return len(list(self.getAll()))
         
 
