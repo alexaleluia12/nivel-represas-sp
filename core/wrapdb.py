@@ -2,9 +2,11 @@
 #-*- coding:utf-8 -*-
 
 import shelve
+import os
 from contextlib import closing
 
-DBFILE = '../db/sb.db'
+
+DBFILE = os.path.join('..', 'db', 'sb.db')
 
 class Db(object):
     
