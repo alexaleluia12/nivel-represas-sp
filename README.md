@@ -13,3 +13,10 @@ Eu seria muito grato se alguem coseguise fazer isso.
 Local onde é feito a requesição:
 'crawl.py' -> Crawl -> getWebPage
 
+> dependências:
+python 2.7
+```
+$ pip install -r requerimentos.txt
+
+```
+talvez você tenha algum problema em instalar o [lxml](http://lxml.de/installation.html)
