@@ -36,14 +36,9 @@ class Slave(object):
         dayCat = fillDict(self.mainData)
         data = self.crawler.getForm(dayCat)
         self.db.save(data)
-        threading.Timer(86400, self.work).start() # se repete a cada 24h
+        
         
 
 if __name__ == '__main__':
     Slave().work()
-    
-        
-
-
-
-    
+  
