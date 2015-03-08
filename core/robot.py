@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-# TODO
-# 
-
-from crawl import Crawl
 import threading
 from datetime import datetime
+import copy
+import pprint
+
+from crawl import Crawl
 from wrapdb import Db
 
 def fillDict(valDict):
@@ -16,11 +16,14 @@ def fillDict(valDict):
     ano = "%Y"
     mes = "%m"
     dia = "%d"
+    cMes = "cmbMes"
+    cAno = "cmbAno"
+    cDia = "cmbDia"
     nowDate = datetime.now()
-    copy = valDict
-    copy["cmbAno"] = int(nowDate.strftime(ano))
-    copy["cmbMes"] = int(nowDate.strftime(mes))
-    copy["cmbDia"] = int(nowDate.strftime(dia))
+    copy = copy.deepcopy(valDict)
+    copy[cAno] = int(nowDate.strftime(ano))
+    copy[cMes] = int(nowDate.strftime(mes))
+    copy[cDia] = int(nowDate.strftime(dia))
     return copy
     
 
@@ -36,8 +39,8 @@ class Slave(object):
         dayCat = fillDict(self.mainData)
         data = self.crawler.getForm(dayCat)
         self.db.save(data)
-        
-        
+        print('OK')
+        pprint.pprint(data)
 
 if __name__ == '__main__':
     Slave().work()
