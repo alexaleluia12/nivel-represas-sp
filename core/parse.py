@@ -30,7 +30,8 @@ class Parser(object):
                 continue     
             indice = tarString.find(letra)     
             listElements.append(tarString[:indice])
-            tarString = tarString[indice:]# a ultima string sai aqui, entao adiciona depois do for        
+            tarString = tarString[indice:]
+            # a ultima string sai aqui, entao adiciona depois do for
         listElements.append(tarString)
         return listElements
     
@@ -63,7 +64,9 @@ class Parser(object):
         """
             xhtml -> string que representa um codigo html ou xml
             
-            retorna dicionario na forma {'SistemaName': volume, ...}
+            retorna dicionario na forma {'SistemaName': 'volume', ...}
+            onde 'volume' eh uma string que pode ser vonvertida para
+            float
         """
         htmlContent = fromstring(xhtml)
         localLS = htmlContent.xpath('//table[@id="tabDados"]/tr//@src')	
@@ -72,7 +75,6 @@ class Parser(object):
         # quantidadeLS[0] == ''7,2 %''
         niveis = map(self.strNumConvert, quantidadeLS)
         represas = map(self.strIBNConvert, localLS)
-        return dict(zip(represas, niveis)) # {"Sistema": nivel, ...}        
+        return dict(zip(represas, niveis)) 
+        # {"Sistema": 'nivel', ...}        
 
-    
-    

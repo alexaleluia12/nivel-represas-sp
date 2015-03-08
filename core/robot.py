@@ -20,11 +20,11 @@ def fillDict(valDict):
     cAno = "cmbAno"
     cDia = "cmbDia"
     nowDate = datetime.now()
-    copy = copy.deepcopy(valDict)
-    copy[cAno] = int(nowDate.strftime(ano))
-    copy[cMes] = int(nowDate.strftime(mes))
-    copy[cDia] = int(nowDate.strftime(dia))
-    return copy
+    copyDict = copy.deepcopy(valDict)
+    copyDict[cAno] = int(nowDate.strftime(ano))
+    copyDict[cMes] = int(nowDate.strftime(mes))
+    copyDict[cDia] = int(nowDate.strftime(dia))
+    return copyDict
     
 
 class Slave(object):
@@ -33,7 +33,7 @@ class Slave(object):
     mainData = {'cmbAno': None,'cmbMes': None,'cmbDia': None}
     def __init__(self):
         self.crawler = Crawl(self.URL)
-        self.db      = Db() 
+        self.db = Db() 
         
     def work(self):
         dayCat = fillDict(self.mainData)

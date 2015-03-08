@@ -44,15 +44,9 @@ class Crawl(object):
         """
             'dictDate' -> dicionario de representa a date da requesicao
             --
-            retorna um dicionario com: {json:{'sistema': nivel, ...}, date: timestamp}
+            retorna um dicionario com: {json:{'sistema': 'nivel', ...}, date: timestamp}
         """
         # 'dictDate' == {'cmbAno': 2015,'cmbMes': 1,'cmbDia': 18}# ano, mes, dia
         json = self.parserObj.convert(self.getWebPage(dictDate))
         return {'json': json, 'date': self.getDateStr(dictDate)}
-        
-          
-        
 
-    
-        
-        
