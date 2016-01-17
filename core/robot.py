@@ -44,5 +44,6 @@ class Slave(object):
     
 
 if __name__ == '__main__':
+    d = [2013, 3, 20]
     Slave().work(*d)
   

@@ -53,12 +53,15 @@ class Parser(object):
         return elemento.strip()
         
     def strIBNConvert(self, elemento):
-        """ pega string no formato 'imagens/sistemaCantareira.gif' e convert para Cantareira """
-        elemento.strip()   
-        newElemento = re.sub(r'i[\w].+/', '', elemento)# newElemento ==  'sistemaCantareira.gif', tira 'imagens'
-        newElemento = re.sub(r'\.[\w].+', '', newElemento)# newElemento == 'sistemaCantareira'  , tira '.gif'
-        newElemento = self.stripFirst(re.search(r'[A-Z]', newElemento))# newElemento == 'Cantareira', tira 'sistema'
-        return newElemento    
+        """ 
+        pega string no formato 'imagens/sistemaCantareiraDoSul.gif' e convert 
+        para 'Cantareira Do Sul'
+        """
+        elemento.strip()
+        m = re.match(r'imagens/sistema([A-Z]\w+).\w+', elemento)
+        assert m
+        return ' '.join(self._splitUpper(m.group(1)))
+        return newElemento
     
     def convert(self, xhtml):
         """
