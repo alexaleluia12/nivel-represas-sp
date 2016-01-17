@@ -68,13 +68,15 @@ class Parser(object):
             onde 'volume' eh uma string que pode ser vonvertida para
             float
         """
-        htmlContent = fromstring(xhtml)
-        localLS = htmlContent.xpath('//table[@id="tabDados"]/tr//@src')	
-        quantidadeLS = htmlContent.xpath('//table[@id="tabDados"]/tr//td[contains(., "%")]/text()')
+        localLS = xhtml.xpath('//table[@id="tabDados"]//tr//@src')
+        quantidadeLS = xhtml.xpath(
+            '//table[@id="tabDados"]//tr//td[contains(., "%")]/text()'
+        )
         # localLS[0] == 'imagens/sistemaCantareira.gif'
         # quantidadeLS[0] == ''7,2 %''
         niveis = map(self.strNumConvert, quantidadeLS)
         represas = map(self.strIBNConvert, localLS)
+        
+        # {"Sistema": 'nivel', ...}
         return dict(zip(represas, niveis)) 
-        # {"Sistema": 'nivel', ...}        
-
+        

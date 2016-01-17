@@ -26,6 +26,7 @@ def splitUpper(tarString):
         --
         retorna um lista de string, mas nao esclui os caraceter da Match,
         e descondidera a primeria letra da string, usa letra maiusculas como referencia
+        MarioBrosJunior -> Mario Bros Junior
     """
     listElements = []
     stRegular = r'[A-Z]'

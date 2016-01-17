@@ -10,5 +10,10 @@
   - enviar um e-mail para mim quando as coisas darem errado
 }
 
+
+
 # quando tiver muitos registros (1 ano)
 fazer uma API REST com esses dados
+
+
+# usar multiprocessamente para pegar os dadoss
