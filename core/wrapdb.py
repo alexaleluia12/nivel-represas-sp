@@ -1,85 +1,22 @@
-#!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-import shelve # tralha com dicionario em arquivo
 import os
 from contextlib import closing
-
+import json
 
 import decorators
 
 
-
-DBFILE = os.path.join('..', 'db', 'sb.db')
-
 class Db(object):
-    @decorators.check
-    def save(self, data, replace=False):
-        """
-        D.save(data, replace=False) -> retonorna None, salva a data no banco.
+    def __init__(self):
+        self._DBFILE = ""
 
-        data dever estar no 
-        formato: {'date': 'xxxx-xx-xx', 'json': {'Guarapiranga': '38.1',...}
-        replace=True -> para que um elemento que já exista no banco seja
-         alterado.
-        """
-        alreadyThere = self.getOne(data['date'])
-        def innerSave():
-            with closing(shelve.open(DBFILE)) as f:
-                k = data['date']
-                f[k] = data
-        if not replace and not alreadyThere:
-            innerSave()
-        elif alreadyThere and replace:
-            innerSave()
-        else:
-            raise RunTimeError("data already exist. set replace=True to \
-                                replace")
+    
+    def save_iter(self, iterable):
+        with open(self._DBFILE, 'wt') as f:
+            str_json_lst = (json.dumps(data) + '\n' for data in iterable)
+            f.writelines(str_json_lst)
+    
+    def set_DBFILE(self, name):
+        self._DBFILE = os.path.join('..', 'db', (name + '.json'))
 
-    def getOne(self, strDate):
-        """
-        D.getOne(strDate) -> retorna: 
-            {'date': '20xx-xx-xx', 'json': {'Guarapiranga': '38.1',...}}
-            se a strDate estiver salva, caso contrario None
-            
-            strDate deve ser uma string parecido com '2010-03-12' 
-            ('ano-mes-dia'), caso o mes tenha um digito 
-            ele deve ser precedido de zero 
-        """
-
-        with closing(shelve.open(DBFILE)) as f:
-            return f.get(strDate, None)
-
-    def excludeOne(self, strDate):
-        """
-        D.excludeOne(strDate) -> exclui a data referente a key strDate, 
-            retorna True caso o elemento foi excluido com sucesso ou False
-            caso strDate nao esteja no db.
-            
-            strDate deve ser uma string parecido com '2010-03-12' 
-            ('ano-mes-dia'), caso o mes tenha um digito 
-            ele deve ser precedido de zero
-        """
-        with closing(shelve.open(DBFILE)) as f:
-            try:
-                del f[strDate]
-                return True
-            except KeyError, err:
-                False
-
-    def getAll(self):
-        """
-            retorna um generator onde cada elemento e um dicionario 
-            parecido com 
-            {'date': '20xx-xx-xx', 'json': {'Guarapiranga': '38.1',...}}
-        """
-        
-        with closing(shelve.open(DBFILE)) as f:
-            for el in f:
-                yield f[el]
-
-    def length(self):
-        """
-            retorna a quantidade de registros no banco de dados
-        """
-        return len(list(self.getAll()))
