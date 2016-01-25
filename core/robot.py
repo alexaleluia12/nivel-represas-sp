@@ -7,24 +7,23 @@ import pprint
 
 from crawl import Crawl
 from wrapdb import Db
+from names import names
 
 # TODO
-# passar dados por linha de comando
+# usar json ao inves de pickel
+# passar dados por linha de comando criar outro modulo py
 
-mainData = {'cmbAno': None,'cmbMes': None,'cmbDia': None}
+mainData = {names.year: None, names.month: None, names.day: None}
 URL = "http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx"
 
 def fillDict(valDict, nowDate=datetime.now()):
     """
     retorna dicionario com os valeres preenchidos com a respectiva data de hoje
     """
-    cMes = "cmbMes"
-    cAno = "cmbAno"
-    cDia = "cmbDia"
     copyDict = copy.deepcopy(valDict)
-    copyDict[cAno] = nowDate.year
-    copyDict[cMes] = nowDate.month
-    copyDict[cDia] = nowDate.day
+    copyDict[names.year] = nowDate.year
+    copyDict[names.month] = nowDate.month
+    copyDict[names.day] = nowDate.day
     return copyDict
     
 
@@ -44,6 +43,6 @@ class Slave(object):
     
 
 if __name__ == '__main__':
-    d = [2013, 3, 20]
+    d = [2010, 4, 21]
     Slave().work(*d)
   

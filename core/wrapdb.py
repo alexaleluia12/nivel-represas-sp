@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-import shelve
+import shelve # tralha com dicionario em arquivo
 import os
 from contextlib import closing
 
@@ -23,18 +23,18 @@ class Db(object):
         replace=True -> para que um elemento que já exista no banco seja
          alterado.
         """
-        alreadThere = self.getOne(data['date'])
+        alreadyThere = self.getOne(data['date'])
         def innerSave():
             with closing(shelve.open(DBFILE)) as f:
                 k = data['date']
                 f[k] = data
-        if not replace and not alreadThere:
+        if not replace and not alreadyThere:
             innerSave()
-        elif alreadThere and replace:
+        elif alreadyThere and replace:
             innerSave()
         else:
-            raise RunTimeError("It seems thar You are wear the wrong \
-                               combinatio o arguments")
+            raise RunTimeError("data already exist. set replace=True to \
+                                replace")
 
     def getOne(self, strDate):
         """
@@ -80,6 +80,6 @@ class Db(object):
 
     def length(self):
         """
-            retorna o a quantidade de registro no banco de dados
+            retorna a quantidade de registros no banco de dados
         """
         return len(list(self.getAll()))

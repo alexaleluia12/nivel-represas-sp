@@ -7,6 +7,7 @@ import datetime
 import dryscrape
 
 from parse import Parser
+from names import names
 
 
 
@@ -28,9 +29,9 @@ class Crawl(object):
          formulario preechida
         """
         
-        dia = 'cmbDia'
-        mes = 'cmbMes'
-        ano = 'cmbAno'
+        dia = names.day
+        mes = names.month
+        ano = names.year
         self.browser.visit(self.url)
         
         ## preenche o formulario
