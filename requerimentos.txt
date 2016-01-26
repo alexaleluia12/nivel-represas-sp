@@ -1,5 +1,8 @@
-argparse==1.2.1
-wsgiref==0.1.2
-requests==2.2.1
-lxml==3.3.3
 BeautifulSoup==3.2.1
+argparse==1.2.1
+beautifulsoup4==4.4.1
+dryscrape==1.0
+lxml==3.3.3
+webkit-server==1.0
+wsgiref==0.1.2
+xvfbwrapper==0.2.7

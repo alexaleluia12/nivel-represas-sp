@@ -14,26 +14,19 @@ from names import names
 
 # TODO
 """
-get_between
-  o nome do arquivo criado vai ser a (start+end)
-  vai pegar os dados apartir de start ate end inclisivo
-
-criar uma property get no DBFILE em wrapdb.py
-
 pegar mudar o parser pq o dados mais atuais da pagina foram alterados
 
-fazer validacoes no get_between
-
-limpar as dependencias que eu nao uso
+fazer isso rodar mais rapido
 """
 
 mainData = {names.year: None, names.month: None, names.day: None}
 URL = "http://www2.sabesp.com.br/mananciais/DivulgacaoSiteSabesp.aspx"
 date_str = '%Y-%m-%d'
+start_date = datetime(2003, 1, 1)
 
 def fillDict(valDict, nowDate=datetime.now()):
     """
-    retorna dicionario com os valeres preenchidos com a respectiva data de hoje
+    retorna dicionario com os valeres preenchidos com a respectiva nowDate
     """
     copyDict = copy.deepcopy(valDict)
     copyDict[names.year] = nowDate.year
@@ -53,19 +46,22 @@ class Slave(object):
     def get_between(self, start, end):
         """
         start and end should be datetime.datetime instance
-        
         start+ (2003, 1, 1)
-        end less or equal then today
-        """
+        end less then today
         
-        assert isinstance(start, datetime)
-        assert isinstance(end, datetime)
-        assert start < end
+        """
+        now = datetime.now()
+        now = datetime(now.year, now.month, now.day)
+        
+        assert isinstance(start, datetime), 'start need to be datetime instance'
+        assert isinstance(end, datetime), 'end need to be datetime instance'
+        assert start < end, 'start need to be less than end'
+        assert end < now, 'end need to be less or equal than yesterday'
+        assert start >= start_date, 'no data before \"2003-01-01\"'
         
         strftime = datetime.strftime
-        self.db.set_DBFILE(
+        self.db.DBFILE = \
             strftime(start, date_str) + "+" + strftime(end, date_str)
-        )
         
         
         # write all the data in the file at once
@@ -91,8 +87,8 @@ if __name__ == '__main__':
 #    d = [2010, 4, 25]
 #    Slave().work(*d)
     s = Slave()
-    a = datetime(2010, 4, 1)
-    b = datetime(2010, 4, 9)
+    a = datetime(2010, 1, 20)
+    b = datetime(2010, 1, 25)
     
     s.get_between(a, b)
   
