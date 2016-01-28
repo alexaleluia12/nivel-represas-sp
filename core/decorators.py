@@ -1,14 +1,5 @@
 import re
 
-# use the set because the order doe't matter
-valueKeysSet = set([
-    'Guarapiranga', 
-    'Rio Claro',
-    'Cantareira',
-    'Rio Grande', 
-    'Cotia',
-    'Alto Tiete'
-])
 
 def is_between(val, interval):
     return val >= interval[0] and val <= interval[1]
@@ -22,20 +13,15 @@ def check(data):
         groups = match.groups()
         month = is_between(int(groups[1]), (1, 12))
         day = is_between(int(groups[2]), (1, 31))
-        originKeys = set(data['json'].keys())
-        keysEqual = valueKeysSet == originKeys
         if month and day:
-            if keysEqual:
-                values = data['json'].values()
-                for i in values:
-                    floatMatch = comp_regex.search(i)
-                    if not floatMatch:
-                        raise TypeError("The value shold be a string \
-                                         that can be convert to float")
-                return True
-            else:
-                raise TypeError("Invalid keys for json -> {0}".\
-                                format(originKeys))
+            values = data['json'].values()
+            for i in values:
+                floatMatch = comp_regex.search(i)
+                if not floatMatch:
+                    raise TypeError("The value shold be a string \
+                                     that can be convert to float")
+            return True
+            
         else:
             raise TypeError("Invalid month or day")
     else:

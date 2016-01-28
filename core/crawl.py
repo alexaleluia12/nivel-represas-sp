@@ -54,7 +54,7 @@ class Crawl(object):
     
     def getDateStr(self, dataDict):
         """
-            retorna uma str 'ano-mes-dia' do dicionario dataDict
+        retorna uma str 'ano-mes-dia' do dicionario dataDict
         """
         formatStr = '%Y-%m-%d'
         return datetime.datetime(*dataDict.values()).strftime(formatStr)

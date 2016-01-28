@@ -23,7 +23,7 @@ def splitUpper(tarString):
     return listElements
 
 
-
+# analisar esta depois para funcionar casao a st seja Sao
 def ndivide(st):
     new_st = st[1:]
     scanner = regex.finditer(new_st)
@@ -80,5 +80,5 @@ sys	0m0.004s
 
 
 if __name__ == "__main__":
-    str_test = "SaoCarlosDaBaraEUmaCidadeMuitoBonitaParaSeVer"
-    test_ndivide(str_test)
+    str_test = "Sao"
+    test_splitUpper(str_test)

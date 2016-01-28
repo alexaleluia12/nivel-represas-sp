@@ -42,13 +42,31 @@ class Slave(object):
         self.crawler = Crawl(URL)
         self.db = Db()
     
+    def get_one(self, date):
+        """
+        start should be datetime.datetime instance
+        start+ (2003, 1, 1)
+        end less then today
+        save the data on db/start.json
+        """
+        now = datetime.now()
+        now = datetime(now.year, now.month, now.day)
+        
+        assert isinstance(date, datetime), 'start need to be datetime instance'
+        assert date < now, 'date need to be less or equal than yesterday'
+        assert date >= start_date, 'no data before \"2003-01-01\"'
+        
+        strftime = datetime.strftime
+        self.db.DBFILE = strftime(date, date_str)
+        
+        self.db.save_iter([self.work(date)])
     
     def get_between(self, start, end):
         """
         start and end should be datetime.datetime instance
         start+ (2003, 1, 1)
         end less then today
-        
+        save the data on db/start+end.json
         """
         now = datetime.now()
         now = datetime(now.year, now.month, now.day)
@@ -72,10 +90,10 @@ class Slave(object):
         day = timedelta(days=1)
         
         yield self.work(start)
-        while start <= end:
+        while start < end:
             start = start + day
             yield self.work(start)
-        
+    
     
     def work(self, time):
         assert isinstance(time, datetime)
@@ -87,8 +105,8 @@ if __name__ == '__main__':
 #    d = [2010, 4, 25]
 #    Slave().work(*d)
     s = Slave()
-    a = datetime(2010, 1, 20)
-    b = datetime(2010, 1, 25)
+    a = datetime(2010, 1, 18)
+    b = datetime(2010, 1, 20)
     
-    s.get_between(a, b)
+    s.get_one(a)
   
