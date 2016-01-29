@@ -23,10 +23,10 @@ class Crawl(object):
     
     def getWebPage(self, form):
         """
-        form -> dicionario data requerido do formulario web
+        form -> dicionario (nomeInput: valor) do formulario
         --
         retorna uma string representado o html da 'url' com a requesicao do
-         formulario preechida
+        formulario preechida
         """
         
         dia = names.day

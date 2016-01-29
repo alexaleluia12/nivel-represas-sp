@@ -62,26 +62,47 @@ def strNumConvert(elemento):
     
 def strIBNConvert(elemento):
     """ pega string no formato 'imagens/sistemaCantareira.gif' e convert para Cantareira """
-    elemento.strip()   
-    newElemento = re.sub(r'i[\w].+/', '', elemento)# newElemento ==  'sistemaCantareira.gif', tira 'imagens'
-    newElemento = re.sub(r'\.[\w].+', '', newElemento)# newElemento == 'sistemaCantareira'  , tira '.gif'
-    newElemento = stripFirst(re.search(r'[A-Z]', newElemento))# newElemento == 'Cantareira', tira 'sistema'
-    return newElemento
+    elemento.strip()
+    m = re.match(r'.+?/sistema([A-Z]\w+).\w+', elemento)
+    return ' '.join(splitUpper(m.group(1)))
+
+def get_nu(st):
+    match = re.match(r'.+?(\d{2},\d\s%)', st)
+    assert match != None
+    st = str(match.group(1))
+    return st
     
 
+#/html/body/form/div[3]/table/tbody/tr[2]/td/blockquote/table/tbody/tr[2]/td[2]/font
 def main():
-    htmlContent = fromstring(basic.getContent('sabespe'))# forma de caregar 'html' que possivelmente nao segue padrao XML
-    localLS = htmlContent.xpath('//table[@id="tabDados"]/tr//@src')	
-    quantidadeLS = htmlContent.xpath('//table[@id="tabDados"]/tr//td[contains(., "%")]/text()')
+    content = ''
+    local = 'xx.html'
+    with open(local, 'rt') as f:
+        content = f.read()
+    assert content != b''
+    
+    htmlContent = fromstring(content)# forma de caregar 'html' que possivelmente nao segue padrao XML
+    localLS = htmlContent.xpath('//table[@id="tabDados"]//tr//@src')	
+    quantidadeLS = htmlContent.xpath('//table[@id="tabDados"]//tr//td[contains(., "%")]/text()')
+    if isinstance(quantidadeLS[0], unicode):
+        quantidadeLS = quantidadeLS[2:]
+        cantareira = htmlContent.xpath('//table[@id="tabDados"]//tr[2]//td[2]')[0]
+        str_value = get_nu(cantareira[-1].text)
+        quantidadeLS.insert(0,str_value)# a ordem eh importante cantareira primeiro
+    
+    
+#    print(etree.tostring(prob, pretty_print=True))
+#    l = prob[-1]
+#    print(etree.tostring(l, pretty_print=True))
+#    print('query ::', get_nu(l.text))
     # localLS[0] == 'imagens/sistemaCantareira.gif'
     # quantidadeLS[0] == ''7,2 %''
     niveis = map(strNumConvert, quantidadeLS)
     represas = map(strIBNConvert, localLS)
     dictData = dict(zip(represas, niveis)) # {"Sistema", nivel, ...}
     pprint(dictData)
-    
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     main()
      
 

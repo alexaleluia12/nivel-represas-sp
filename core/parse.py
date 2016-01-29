@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
 from lxml import etree
@@ -10,6 +9,12 @@ import string
 regex = re.compile(r'[A-Z]')
 
 class Parser(object):
+    
+    def get_number(self, st):
+        match = re.match(r'.+?(\d{2},\d\s%)', st)
+        assert match != None
+        st = str(match.group(1))
+        return st
     
     def _splitUpper(self, tarString):
         """
@@ -42,7 +47,7 @@ class Parser(object):
         para 'Cantareira Do Sul'
         """
         elemento.strip()
-        m = re.match(r'imagens/sistema([A-Z]\w+).\w+', elemento)
+        m = re.match(r'.+?/sistema([A-Z]\w+).\w+', elemento)
         assert m
         return ' '.join(self._splitUpper(m.group(1)))
     
@@ -55,9 +60,19 @@ class Parser(object):
         float
         """
         localLS = xhtml.xpath('//table[@id="tabDados"]//tr//@src')
+        # td[contains(., '%')]/text()
+        # caso o td corrente '.' tenha '%' pega o texto dele 'text()'
         quantidadeLS = xhtml.xpath(
             '//table[@id="tabDados"]//tr//td[contains(., "%")]/text()'
         )
+        # eh necessario um processamento extra devido a mudanca da pagina
+        if isinstance(quantidadeLS[0], unicode):
+            quantidadeLS = quantidadeLS[2:]
+            # pega apenas o tag referente ao sistema cantareira
+            cantareira = xhtml.xpath('//table[@id="tabDados"]//tr[2]//td[2]')[0]
+            ultimo_filho = cantareira[-1]
+            quantidadeLS.insert(0, self.get_number(ultimo_filho.text))
+        
         # localLS[0] == 'imagens/sistemaCantareira.gif'
         # quantidadeLS[0] == ''7,2 %''
         niveis = map(self.strNumConvert, quantidadeLS)

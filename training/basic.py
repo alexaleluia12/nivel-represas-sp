@@ -11,10 +11,10 @@ inserir html com unicode
 from lxml import etree
 
 def getContent(localFile):
-	with open(localFile) as f:
+	with open(localFile, 'wt') as f:
 		return f.read()
 
-def show(obj):	
+def show(obj):
 	try:	
 		for element in obj:	
 			print(etree.tostring(element, pretty_print=True))
@@ -22,7 +22,7 @@ def show(obj):
 		print(obj)
 	
 
-def main(strPath, file='xpath.xml'):			
+def main(strPath, file='xpath.xml'):
 	html = etree.fromstring(getContent(file))
 	empregados = html.xpath(strPath)
 	show(empregados)

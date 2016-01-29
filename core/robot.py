@@ -14,7 +14,6 @@ from names import names
 
 # TODO
 """
-pegar mudar o parser pq o dados mais atuais da pagina foram alterados
 
 fazer isso rodar mais rapido
 """
@@ -59,6 +58,7 @@ class Slave(object):
         strftime = datetime.strftime
         self.db.DBFILE = strftime(date, date_str)
         
+        data = self.work(date)
         self.db.save_iter([self.work(date)])
     
     def get_between(self, start, end):
@@ -102,11 +102,8 @@ class Slave(object):
         return data
 
 if __name__ == '__main__':
-#    d = [2010, 4, 25]
-#    Slave().work(*d)
     s = Slave()
-    a = datetime(2010, 1, 18)
-    b = datetime(2010, 1, 20)
+    a = datetime(2016, 1, 19)
+    b = datetime(2004, 2, 22)
     
-    s.get_one(a)
-  
+    s.get_one(b)
